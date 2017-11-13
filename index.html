@@ -89,7 +89,11 @@
             x += dx;
             y += dy;
             if(x + ballRadius > canvas.width || x - ballRadius <= 0) dx *= -1;
-            if(y + ballRadius > canvas.height || y - ballRadius <= 0) dy *= -1;
+            if(y - ballRadius <= 0) dy *= -1;
+            if(y + ballRadius > canvas.height){
+                alert("GAME OVER!");
+                document.location.reload();
+            }
             
         }
 
