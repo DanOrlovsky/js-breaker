@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Breakout!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="breakoutCanvas" width="640" height="480"></canvas>
+    <script>
+        'use strict';
+
+        function clamp(num, min, max) {
+            return num <= min ? min : num >= max ? max : num;
+        }
+
+        var canvas = document.getElementById('breakoutCanvas');
+        var ctx = canvas.getContext("2d");
+        var x = canvas.width / 2;
+        var y = canvas.height / 2;
+        var ballRadius = 10;
+        var paddleHeight = 10;
+        var paddleWidth = 75;
+        var paddleX = (canvas.width-paddleWidth) / 2;
+        var paddleY = canvas.height - (canvas.height / 5);
+        var rightPressed = false;
+        var leftPressed = false;
+        var dx = 2;
+        var dy = -2;
+        
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+        function keyDownHandler(e) {
+            if(e.keyCode == 39 || e.keyCode == 68) {
+                rightPressed = true;
+            } else if(e.keyCode == 37 || e.keyCode == 65) {
+                leftPressed = true;
+            }
+        }
+        function keyUpHandler(e) {
+            if(e.keyCode == 39 || e.keyCode == 68) {
+                rightPressed = false;
+            } else if(e.keyCode == 37 || e.keyCode == 65) {
+
+                leftPressed = false;
+            }
+        }
+
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(x,y,ballRadius,0,Math.PI*2);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function drawPaddle() {
+            ctx.beginPath();
+            ctx.rect(paddleX,paddleY, paddleWidth, paddleHeight);
+            ctx.fillStyle = "red";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function draw() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            drawBall();
+            drawPaddle();
+            if(rightPressed) {
+                paddleX += 7;
+            } else if(leftPressed) {
+                paddleX -= 7;
+            }
+            paddleX = clamp(paddleX, 0, canvas.width - paddleWidth);
+            x += dx;
+            y += dy;
+            if(x + ballRadius > canvas.width || x - ballRadius <= 0) dx *= -1;
+            if(y + ballRadius > canvas.height || y - ballRadius <= 0) dy *= -1;
+            
+        }
+
+        setInterval(draw,10);
+
+    </script>
+</body>
+
+</html>
