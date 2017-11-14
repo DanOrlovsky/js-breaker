@@ -82,6 +82,7 @@ function keyDownHandler(e) {
     }
     if (!ballMoving) {
         if (e.keyCode == 32) {
+            document.getElementById("gameover").style.display = "none";
             ballMoving = true;
         }
     }
@@ -212,7 +213,7 @@ function gameLoop() {
         }
 
         if (ballY + ballRadius > canvas.height) {
-            document.getElementById('gameover').style('dispay') = 'block';
+            document.getElementById('gameover').style.dispay = 'block';
             playerScore = 0;
             startGame();
         }
