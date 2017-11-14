@@ -5,123 +5,25 @@
     <title>Breakout!</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        * {
-            padding: 0;
-            margin: 0;
-        }
-
-        canvas {
-            background: #eee;
-            display: block;
-            margin: 0 auto;
-        }
-    </style>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <link href='assets/css/style.css' type='text/css' rel='stylesheet'>
 </head>
 
 <body>
     <canvas id="breakoutCanvas" width="640" height="480"></canvas>
+    <div class="row">
+        
+        <div class="col-xs-12 col-sm-8 col-sm-push-2 col-md-4 col-md-push-4">
+            <h2 id="gameover" style="display:none">GAME OVER!!</h2>
+            <h2>Player's Score: <span id="score"></span></h2>
+        </div>
+    </div>
+    <script src="assets/js/game.js"></script>
     <script>
-        'use strict';
-
-        function clamp(num, min, max) {
-            return num <= min ? min : num >= max ? max : num;
-        }
-
-        var canvas = document.getElementById('breakoutCanvas');
-        var ctx = canvas.getContext("2d");
-        var ballX = canvas.width / 2;
-        var ballY = canvas.height / 2;
-        var ballRadius = 10;
-        var paddleHeight = 10;
-        var paddleWidth = 75;
-        var paddleX = (canvas.width - paddleWidth) / 2;
-        var paddleY = canvas.height - (canvas.height / 5);
-        var rightPressed = false;
-        var leftPressed = false;
-        let paddleHits = 0;
-        var dx = 2;
-        var dy = -2;
-
-
-
-        document.addEventListener("keydown", keyDownHandler, false);
-        document.addEventListener("keyup", keyUpHandler, false);
-
-        function keyDownHandler(e) {
-            if (e.keyCode == 39 || e.keyCode == 68) {
-                rightPressed = true;
-            } else if (e.keyCode == 37 || e.keyCode == 65) {
-                leftPressed = true;
-            }
-        }
-
-        function keyUpHandler(e) {
-            if (e.keyCode == 39 || e.keyCode == 68) {
-                rightPressed = false;
-            } else if (e.keyCode == 37 || e.keyCode == 65) {
-
-                leftPressed = false;
-            }
-        }
-
-        function drawBall() {
-            ctx.beginPath();
-            ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
-            ctx.fillStyle = "#0095DD";
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        function drawPaddle() {
-            ctx.beginPath();
-            ctx.rect(paddleX, paddleY, paddleWidth, paddleHeight);
-            ctx.fillStyle = "red";
-            ctx.fill();
-            ctx.closePath();
-        }
-        var skipPaddleDetect = false;
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawBall();
-            drawPaddle();
-            if (rightPressed) {
-                paddleX += 7;
-            } else if (leftPressed) {
-                paddleX -= 7;
-            }
-            paddleX = clamp(paddleX, 0, canvas.width - paddleWidth);
-            ballX += dx;
-            ballY += dy;
-            if (ballX + ballRadius > canvas.width || ballX - ballRadius <= 0) dx *= -1;
-            if (ballY - ballRadius <= 0) dy *= -1;
-            //if (!skipPaddleDetect) {
-                if (ballX >= paddleX && ballX + ballRadius <= paddleX + paddleWidth) {
-                    if ((ballY + ballRadius >= paddleY && ballY + ballRadius <= paddleY + paddleHeight) || 
-                        (ballY - ballRadius >= paddleY && ballY - ballRadius <= paddleY + paddleHeight)) {
-                        dy *= -1;
-                        ballY = paddleY - ballRadius;
-                        skipPaddleDetect = true;
-                        paddleHits++;
-                        if(paddleHits % 3) {
-                            dx = dx < 0 ? dx-1 : dx+1;
-                            dy = dy < 0 ? dy-1 : dy+1;
-                        }
-                    }
-                }
-            //} //else { 
-              //  skipPaddleDetect = false;
-            //}
-            if (ballY + ballRadius > canvas.height) {
-                alert("GAME OVER!");
-                document.location.reload();
-            }
-
-        }
-
-        setInterval(draw, 10);
+        startGame();
     </script>
+
 </body>
 
 </html>
