@@ -13,30 +13,37 @@ var rowColors = [
 
 var canvas = document.getElementById('breakoutCanvas');
 var ctx = canvas.getContext("2d");
-var ballRadius = 10;
+
+var ballX = paddleX + (paddleWidth / 2); //canvas.width / 2;
+var ballY = paddleY - ballRadius; //canvas.height / 2;
+var ballMoving = false;
+var ballRadius = 9;
+
 var paddleHeight = 10;
-var paddleWidth = 75;
+var paddleWidth = 100;
 var paddleX = (canvas.width - paddleWidth) / 2;
 var paddleY = canvas.height - (canvas.height / 10);
+var paddleCurve = 1.5;
+
+
 var rightPressed = false;
 var leftPressed = false;
-let paddleHits = 0;
+
 var brickRowCount = 4;
 var brickColumnCount = 6;
 var brickWidth = 75;
 var brickHeight = 20;
-var brickPadding = 10;
+var brickPadding = 15;
 var brickOffsetTop = 30;
-var paddleCurve = 1.5;
 var brickOffsetLeft = (canvas.width - ((brickWidth + brickPadding) * brickColumnCount)) / 2;
+var bricks = [];
+
 var dx = 1.5;
 var dy = -2;
-var ballX = paddleX + (paddleWidth / 2); //canvas.width / 2;
-var ballY = paddleY - ballRadius; //canvas.height / 2;
-var ballMoving = false;
-var bricks = [];
+
 var paddleHit = './assets/sounds/paddleHit.wav';
 var brickSmash = './assets/sounds/brickSmash.wav';
+
 var playerScore = 0;
 
 
@@ -126,7 +133,8 @@ function collisionDetection() {
         for (var r = 0; r < brickRowCount; r++) {
             var b = bricks[c][r];
             if (bricks[c][r].status == 1) {
-                if (ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
+                if (ballX + ballRadius > b.x && ballX - ballRadius < b.x + brickWidth && 
+                    ballY + ballRadius > b.y && ballY - ballRadius < b.y + brickHeight) {
                     dy *= -1;
                     bricks[c][r].status = 0;
                     playerScore += 10;
